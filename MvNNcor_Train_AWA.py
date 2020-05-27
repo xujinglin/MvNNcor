@@ -34,7 +34,7 @@ os.environ['CUDA_VISIBLE_DEVICES']='0'
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset_dir', default='/home/xujinglin/Documents/DataSets/Animals_with_Attributes/Features', help='the path of data')
+parser.add_argument('--dataset_dir', default='./mvdata/Animals_with_Attributes/Features', help='the path of data')
 parser.add_argument('--data_name', default='AWA', help='The name of the data')
 parser.add_argument('--mode', default='train', help='train|val|test')
 parser.add_argument('--outf', default='./results/MvNNcor')
