@@ -7,7 +7,7 @@ This is an implementation of Deep Embedded Complementary and Interactive Informa
 * Torchvision=0.2.1
 
 ## Datasets
-The model is trained on AWA/Caltech101/Reuters dataset, where each dataset are splited into three parts: 70% samples for training, two-thirds of the rest samples for validation, and one-third of that for testing. We utilize the classification accuracy to evaluate the performance of all the methods.
+The model is trained on AWA/Caltech101/Caltech20/NUSOBJ/Reuters/Hand dataset, where each dataset are splited into three parts: 70% samples for training, two-thirds of the rest samples for validation, and one-third of that for testing. We utilize the classification accuracy to evaluate the performance of all the methods.
 
 ## Implementation
 ```
