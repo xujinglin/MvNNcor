@@ -9,10 +9,10 @@ The model is trained on AWA/Caltech101/Reuters dataset, where each dataset are s
 ## Implementation
 ```
 # Train the model on AWA dataset
-python MvNNcor_Train.py --dataset_dir ./mvdata/AWA/Features --data_name=AWA --num_classes=50 --num_view=6 --gamma=6.0
+python MvNNcor_Train.py --dataset_dir=./mvdata/AWA/Features --data_name=AWA --num_classes=50 --num_view=6 --gamma=6.0
 
 # Test MvNNcor on AWA dataset
-python MvNNcor_Test.py --dataset_dir ./mvdata/AWA/Features --data_name=AWA --resume ./results/.../model_best.pth.tar --num_classes=50 --num_view=6 --gamma=6.0
+python MvNNcor_Test.py --dataset_dir=./mvdata/AWA/Features --data_name=AWA --resume=./results/.../model_best.pth.tar --num_classes=50 --num_view=6 --gamma=6.0
 ```
 
 ## Citation
