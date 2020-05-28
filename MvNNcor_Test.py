@@ -1,9 +1,6 @@
 """
-This program is for Multi_view Classification. 
 
-Author: Wenbin & Jinglin
-
-Date: Sep. 27, 2018
+Contributed by Wenbin Li & Jinglin Xu
 
 """
 
@@ -72,7 +69,7 @@ if torch.cuda.is_available() and not opt.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
 
 # save the opt and results to txt file
-opt.outf = opt.outf+'_'+opt.data_name+'_'+str(opt.basemodel)+'_Epochs_'+str(opt.epochs)+'_fea_'+str(opt.fea_out)+'_'+str(opt.fea_com)+'_'+str(opt.gamma)+'_'+str(opt.batchSize)
+opt.outf = opt.outf+'_'+opt.data_name+'_Epochs_'+str(opt.epochs)+'_'+str(opt.gamma)
 if not os.path.exists(opt.outf):
     os.makedirs(opt.outf)
 
