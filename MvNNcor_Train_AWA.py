@@ -374,8 +374,6 @@ for epoch in range(opt.epochs):
 
     # save the checkpoint
     filename = os.path.join(opt.outf, 'epoch_%d.pth.tar' %epoch)
-  
-
     if is_best:
         save_checkpoint(
         {
