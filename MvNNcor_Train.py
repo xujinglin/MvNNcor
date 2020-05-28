@@ -27,11 +27,9 @@ from PIL import ImageFile
 from dataset.AWADataset import animalAttrData
 import models.network_MvNNcor as MultiviewNet
 
-
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 os.environ['CUDA_DEVICE_ORDER']='PCI_BUS_ID'
 os.environ['CUDA_VISIBLE_DEVICES']='0'
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset_dir', default='./mvdata/Animals_with_Attributes/Features', help='the path of data')
@@ -62,10 +60,8 @@ opt = parser.parse_args()
 opt.cuda = True
 cudnn.benchmark = True
 
-
 if torch.cuda.is_available() and not opt.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
-
 
 # save the opt and results to txt file
 opt.outf = opt.outf+'_'+opt.data_name+'_'+str(opt.basemodel)+'_Epochs_'+str(opt.epochs)+'_fea_'+str(opt.fea_out)+'_'+str(opt.fea_com)+'_'+str(opt.gamma)+'_'+str(opt.batchSize)
@@ -75,9 +71,7 @@ if not os.path.exists(opt.outf):
 txt_save_path = os.path.join(opt.outf, 'opt_results.txt')
 F_txt = open(txt_save_path, 'a+')
 
-
 # ======================================== Folder of Datasets ==========================================
-
 if opt.data_name == 'AWA':
 
     trainset = animalAttrData(data_dir=opt.dataset_dir, mode=opt.mode)
@@ -91,9 +85,7 @@ print('Trainset: %d' %len(trainset), file=F_txt)
 print('Valset: %d' %len(valset), file=F_txt)
 print('Testset: %d' %len(testset), file=F_txt)
 
-
 # ========================================== Load Datasets ==============================================
-
 train_loader = torch.utils.data.DataLoader(
     trainset, batch_size=opt.batchSize, shuffle=True, 
     num_workers=int(opt.workers), drop_last=True, pin_memory=True
@@ -109,9 +101,7 @@ test_loader = torch.utils.data.DataLoader(
 print(opt)
 print(opt, file=F_txt)
 
-
 # ========================================== Model config ===============================================
-
 train_iter = iter(train_loader)
 traindata, target = train_iter.next()    
 view_list = []
@@ -138,17 +128,14 @@ criterion = nn.CrossEntropyLoss().cuda()
 optimizer = optim.Adam(model.parameters(), lr=opt.lr, betas=(opt.beta1, 0.9))
 
 # ======================================= Define functions =============================================
-
 def reset_grad():
     model.zero_grad()
-
 
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
     lr = opt.lr * (0.05 ** (epoch // 30))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
-
 
 def train(train_loader, model, weight_var, gamma, criterion, optimizer, epoch, F_txt):
     batch_time = AverageMeter()
@@ -299,7 +286,6 @@ def validate(val_loader, model, weight_var, gamma, criterion, best_prec1, F_txt)
                         epoch, index, len(val_loader), batch_time=batch_time,
                         loss=losses, top1=top1, top5=top5), file=F_txt)
 
-
         print(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f} Best_Prec@1 {best:.3f}'.format(top1=top1, top5=top5, best=best_prec1))
         print(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f} Best_Prec@1 {best:.3f}'.format(top1=top1, top5=top5, best=best_prec1), file=F_txt)
     
@@ -345,7 +331,6 @@ def accuracy(output, target, topk=(1,)):
         return res
 
 # ============================================ Training phase ========================================
-
 print('start training.........')
 start_time = time.time()
 best_prec1 = 0
@@ -363,7 +348,6 @@ for epoch in range(opt.epochs):
     # evaluate on validation/test 
     print('=============== Testing in the validation set ===============')    
     prec1 = validate(val_loader, model, weight_var, gamma, criterion, best_prec1, F_txt)  
-
 
     print('================== Testing in the test set ==================')   
     prec2 = validate(val_loader, model, weight_var, gamma, criterion, best_prec1, F_txt)  
@@ -384,7 +368,6 @@ for epoch in range(opt.epochs):
             'best_prec1': best_prec1,
             'optimizer' : optimizer.state_dict(),
         }, is_best, filename)
-
 
 print('======== Training END ========')
 F_txt.close()
