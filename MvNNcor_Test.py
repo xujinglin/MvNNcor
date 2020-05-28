@@ -34,12 +34,10 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 os.environ['CUDA_DEVICE_ORDER']='PCI_BUS_ID'
 os.environ['CUDA_VISIBLE_DEVICES']='0'
 
-
 # Load the pre-trained model
 data_name = 'AWA'
 data_dir = './mvdata/Animals_with_Attributes/Features'
 model_trained = './results/MvNNcor_AWA_multiviewNet_Epochs_50_fea_200_300_6.0_64/model_best.pth.tar'
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset_dir', default=data_dir, help='the path of data')
@@ -70,10 +68,8 @@ opt = parser.parse_args()
 opt.cuda = True
 cudnn.benchmark = True
 
-
 if torch.cuda.is_available() and not opt.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
-
 
 # save the opt and results to txt file
 opt.outf = opt.outf+'_'+opt.data_name+'_'+str(opt.basemodel)+'_Epochs_'+str(opt.epochs)+'_fea_'+str(opt.fea_out)+'_'+str(opt.fea_com)+'_'+str(opt.gamma)+'_'+str(opt.batchSize)
@@ -82,7 +78,6 @@ if not os.path.exists(opt.outf):
 
 txt_save_path = os.path.join(opt.outf, 'test_results.txt')
 F_txt = open(txt_save_path, 'a+')
-
 
 # ======================================== Folder of Datasets ==========================================
 if opt.data_name == 'AWA':
@@ -105,13 +100,10 @@ elif opt.data_name == 'Reuter':
 else:
     print('There is something wrong!')
 
-
 print('Testset: %d' %len(testset))
 print('Testset: %d' %len(testset), file=F_txt)
 
-
 # ========================================== Load Datasets ==============================================
-
 test_loader = torch.utils.data.DataLoader(
     testset, batch_size=opt.testSize, shuffle=True, 
     num_workers=int(opt.workers), drop_last=True, pin_memory=True
@@ -142,8 +134,6 @@ model = MultiviewNet.define_MultiViewNet(which_model=opt.basemodel, norm='batch'
 criterion = nn.CrossEntropyLoss().cuda()
 optimizer = optim.Adam(model.parameters(), lr=opt.lr, betas=(opt.beta1, 0.9))
 
-
-
 # optionally resume from a checkpoint
 if opt.resume:
     if os.path.isfile(opt.resume):
@@ -158,7 +148,6 @@ if opt.resume:
         print("=> loaded checkpoint '{}' (epoch {})".format(opt.resume, checkpoint['epoch']))
     else:
         print("=> no checkpoint found at '{}'".format(opt.resume))
-
 
 if opt.ngpu > 1:
     model = nn.DataParallel(model, range(opt.ngpu))
@@ -195,7 +184,6 @@ def validate(val_loader, model, weight_var, gamma, criterion, best_prec1, F_txt)
                 loss_temp = criterion(Output_list[v], target_var)
                 loss += (weight_var[v] ** gamma) * loss_temp
 
-            
             output_var = torch.stack(Output_list)
             weight_var = weight_var.unsqueeze(1)
             weight_var = weight_var.unsqueeze(2)
@@ -233,14 +221,12 @@ def validate(val_loader, model, weight_var, gamma, criterion, best_prec1, F_txt)
                         epoch, index, len(val_loader), batch_time=batch_time,
                         loss=losses, top1=top1, top5=top5), file=F_txt)
 
-
         print(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f} Best_Prec@1 {best:.3f}'.format(top1=top1, top5=top5, best=best_prec1))
         print(' * Prec@1 {top1.avg:.3f} Prec@5 {top5.avg:.3f} Best_Prec@1 {best:.3f}'.format(top1=top1, top5=top5, best=best_prec1), file=F_txt)
         print(weight_var)
         print(weight_var, file=F_txt)
     
     return top1.avg
-
 
 class AverageMeter(object):
     """Computes and stores the average and current value"""
@@ -259,7 +245,6 @@ class AverageMeter(object):
         self.count += n
         self.avg = self.sum / self.count
 
-
 def accuracy(output, target, topk=(1,)):
     """Computes the precision@k for the specified values of k"""
     with torch.no_grad():
@@ -276,9 +261,7 @@ def accuracy(output, target, topk=(1,)):
             res.append(correct_k.mul_(100.0 / batch_size))
         return res
 
-
 # ============================================ Testing phase ========================================
-
 print('start testing.........')
 start_time = time.time()  
 gamma = torch.tensor(opt.gamma).to("cuda")
